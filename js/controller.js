@@ -110,6 +110,9 @@
                 FitbitService.todaySummary(function(response){
                     $scope.fbToday = response;
                 });
+                FitbitService.todaySleep(function(response){
+                    $scope.fbSleep = response;
+                });
             };
 
             refreshMirrorData();

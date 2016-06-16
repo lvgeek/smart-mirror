@@ -179,6 +179,51 @@
                         if (err) console.log(err);
                     });
                 }
+                result.summary.distances[0].distance = parseFloat((result.summary.distances[0].distance)*0.62).toFixed(2)+" Miles";
+                return callback(result);
+            });
+        }
+        service.todaySleep = function(callback) {
+            if(service.sleep === null){
+                return null;
+            }
+
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth()+1; //January is 0!
+            var yyyy = today.getFullYear();
+
+            // Add padding for the date, (we want 0x where x is the day or month number if its less than 10)
+            if(dd<10) {
+                dd='0'+dd
+            } 
+
+            if(mm<10) {
+                mm='0'+mm
+            } 
+
+            today = yyyy+'-'+mm+'-'+dd;
+                
+            // Make an API call to get the users activities for today
+            fitbit.request({
+                uri: "https://api.fitbit.com/1/user/-/sleep/date/" + today + ".json",
+                method: 'GET',
+            }, function(err, body, token) {
+                if (err) {
+                    console.log(err);
+                }
+                var result = JSON.parse(body);
+           
+                // If the token arg is not null, then a refresh has occured and
+                // we must persist the new token.
+                if (token) {
+                    persist.write(tfile, token, function(err) {
+                        if (err) console.log(err);
+                    });
+                }
+                var tmphrs = parseInt(result.summary.totalMinutesAsleep/60);
+                var tmpmins = result.summary.totalMinutesAsleep - (tmphrs * 60);
+                result.summary.totalMinutesAsleep = tmphrs + " hr "+tmpmins+" min";
                 return callback(result);
             });
         }

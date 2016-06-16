@@ -161,12 +161,13 @@
       </div>
       <div class="bottom-left" ng-show="fitbitEnabled">
         <div>
-          <div><span class="fitbit-title">Fitbit stats for {{fbDailyAverage.fullName}}</span></div>
+          <div><span class="fitbit-title">Fitbit stats for {{fbDailyAverage.nickname}}</span></div>
           <div><span class="fitbit-item">Your daily average steps: {{fbDailyAverage.averageDailySteps}}</span></div>
           <div><span class="fitbit-item">Today's steps: {{fbToday.summary.steps}}</span></div>
-          <div><span class="fitbit-item">Today's distance: {{fbToday.summary.distances[0].distance}} KM</span></div>
-          <div><span class="fitbit-item">Today's active minutes: {{(fbToday.summary.veryActiveMinutes) + (fbToday.summary.fairlyActiveMinutes)}}</span></div>
+          <div><span class="fitbit-item">Today's distance: {{fbToday.summary.distances[0].distance}}</span></div>
+          <!-- <div><span class="fitbit-item">Today's active minutes: {{(fbToday.summary.veryActiveMinutes) + (fbToday.summary.fairlyActiveMinutes)}}</span></div> -->
           <div><span class="fitbit-item">Calories burned: {{fbToday.summary.caloriesOut}}</span></div>
+          <div><span class="fitbit-item">Sleep: {{fbSleep.summary.totalMinutesAsleep}}</span></div>
           <p></p>
           <div><span class="fitbit-subtitle">Latest badges</span></div>
           <div class="" ng-repeat="badge in fbDailyAverage.topBadges">
