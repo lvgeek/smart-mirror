@@ -127,17 +127,18 @@
                 if (err) {
                     console.log(err);
 
-                }
-                var result = JSON.parse(body);
+                }  else {
+                    var result = JSON.parse(body);
 
-                // If the token arg is not null, then a refresh has occured and
-                // we must persist the new token.
-                if (token) {
-                    persist.write( tfile, token, function(err) {
-                        if (err) console.log(err);
-                    });
+                    // If the token arg is not null, then a refresh has occured and
+                    // we must persist the new token.
+                    if (token) {
+                        persist.write( tfile, token, function(err) {
+                            if (err) console.log(err);
+                        });
+                    }
+                    return callback(result.user);
                 }
-                return callback(result.user);
             });
         }
 
@@ -169,18 +170,19 @@
             }, function(err, body, token) {
                 if (err) {
                     console.log(err);
+                } else {
+                    var result = JSON.parse(body);
+                    
+                    // If the token arg is not null, then a refresh has occured and
+                    // we must persist the new token.
+                    if (token) {
+                        persist.write(tfile, token, function(err) {
+                            if (err) console.log(err);
+                        });
+                    }
+                    result.summary.distances[0].distance = parseFloat((result.summary.distances[0].distance)*0.62).toFixed(2)+" Miles";
+                    return callback(result);
                 }
-                var result = JSON.parse(body);
-                
-                // If the token arg is not null, then a refresh has occured and
-                // we must persist the new token.
-                if (token) {
-                    persist.write(tfile, token, function(err) {
-                        if (err) console.log(err);
-                    });
-                }
-                result.summary.distances[0].distance = parseFloat((result.summary.distances[0].distance)*0.62).toFixed(2)+" Miles";
-                return callback(result);
             });
         }
         service.todaySleep = function(callback) {
@@ -211,20 +213,21 @@
             }, function(err, body, token) {
                 if (err) {
                     console.log(err);
+                } else {
+                    var result = JSON.parse(body);
+               
+                    // If the token arg is not null, then a refresh has occured and
+                    // we must persist the new token.
+                    if (token) {
+                        persist.write(tfile, token, function(err) {
+                            if (err) console.log(err);
+                        });
+                    }
+                    var tmphrs = parseInt(result.summary.totalMinutesAsleep/60);
+                    var tmpmins = result.summary.totalMinutesAsleep - (tmphrs * 60);
+                    result.summary.totalMinutesAsleep = tmphrs + " hr "+tmpmins+" min";
+                    return callback(result);
                 }
-                var result = JSON.parse(body);
-           
-                // If the token arg is not null, then a refresh has occured and
-                // we must persist the new token.
-                if (token) {
-                    persist.write(tfile, token, function(err) {
-                        if (err) console.log(err);
-                    });
-                }
-                var tmphrs = parseInt(result.summary.totalMinutesAsleep/60);
-                var tmpmins = result.summary.totalMinutesAsleep - (tmphrs * 60);
-                result.summary.totalMinutesAsleep = tmphrs + " hr "+tmpmins+" min";
-                return callback(result);
             });
         }
         
